@@ -61,7 +61,7 @@ base.withNS: (key, initializer) ->
   currentNS
 
 base.withBase: (closure) ->
-  scopedClosure closure, base
+  scopedClosure closure, @baseNS
 
 base.isRoot: ->
   not @parent?
@@ -104,7 +104,7 @@ makeNS: (name, parent, sharedPrototype) ->
     namespace.prototype: sharedPrototype
     new namespace name, parent
 
-Shuriken.as: (name) -> @[name]: makeNS name
+Shuriken.as: (name) -> makeNS name
 
 @['Shuriken'] = Shuriken
 

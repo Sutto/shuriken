@@ -8,7 +8,7 @@ that provides a lightweight implementation of namespaces and a few other things
 Using it is as simple as including the shuriken.js in your app and writing your code:
 
     // declare BHM as a root namespace.
-    Shuriken.as('BHM');
+    var BHM = Shuriken.as('BHM');
     
     // Should print out true.
     console.log(BHM instanceof Shuriken.Namespace);
