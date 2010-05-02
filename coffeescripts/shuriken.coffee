@@ -5,7 +5,7 @@ if jQuery?
     $.fn.dataAttr: (key, value) -> @attr stringToDataKey(key), value
     $.fn.removeDataAttr:  (key) -> @removeAttr stringToDataKey(key)
     $.fn.hasDataAttr:     (key) -> @is "[${stringToDataKey(key)}]"
-    $.getMeta:            (key) -> $("meta[name='$key']").attr "content"
+    $.metaAttr:           (key) -> $("meta[name='$key']").attr "content"
   )(jQuery)
 
 
@@ -14,7 +14,7 @@ Shuriken: {
   Util:         {}
   jsPathPrefix: "/javascripts/"
   jsPathSuffix: ""
-  namespaces:   {},
+  namespaces:   {}
   extensions:   []
 }
 
@@ -44,7 +44,7 @@ base.getNS: (namespace) ->
   currentNS: @
   for name in parts
     return unless currentNS[name]?
-    currentNS = currentNS[name]
+    currentNS: currentNS[name]
   currentNS
   
 base.getRootNS: ->
@@ -59,7 +59,7 @@ base.withNS: (key, initializer) ->
   parts: key.split "."
   currentNS: @
   for name in parts
-    currentNS[name] = makeNS(name, currentNS, @baseNS) if not currentNS[name]?
+    currentNS[name]: makeNS(name, currentNS, @baseNS) if not currentNS[name]?
     currentNS: currentNS[name]
   hadSetup: $.isFunction currentNS.setup
   Shuriken.Util.scopedClosure initializer, currentNS
@@ -96,7 +96,7 @@ base.autosetup: true
 
 # Used as a part of the prototype chain.
 Shuriken.Namespace: ->  
-Shuriken.Namespace.prototype = Shuriken.Base;
+Shuriken.Namespace.prototype: Shuriken.Base
 
 makeNS: (name, parent, sharedPrototype) ->
    sharedPrototype?= new Shuriken.Namespace()
@@ -124,4 +124,4 @@ Shuriken.as: (name) ->
   ns
 
 Shuriken.root: @
-@['Shuriken'] = Shuriken
+@['Shuriken']: Shuriken
