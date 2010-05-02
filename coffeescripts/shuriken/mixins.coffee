@@ -1,11 +1,11 @@
-Shuriken.eachNS: (baseNS) ->
+Shuriken.defineExtension (baseNS) ->
   baseNS.withNS 'Mixins', (ns) ->
-    root: @getRootNS()
   
+    root:        @getRootNS()
     ns.mixins:   {}
     root.mixins: {}
 
-    root.extendBase (base) ->
+    root.withBase (base) ->
       base.mixin: (mixins) -> ns.mixin @, mixins
 
     defineMixin: (key, mixin) ->

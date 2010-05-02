@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake'
 
-require 'lib/shuriken/version'
+require 'lib/shuriken'
 
 begin
   require 'jeweler'
