@@ -111,12 +111,11 @@
      @children: []
      parent.hasChildNamespace(@) if parent?
      @
-  namespace.prototype: sharedPrototype
-  new namespace name, parent
+   namespace.prototype: sharedPrototype
+   new namespace name, parent
 
   Shuriken.defineExtension: (closure) ->
     for namespace in Shuriken.namespaces
-      console.log namespace
       scopedClosure closure, namespace
     Shuriken.extensions.push closure
 
