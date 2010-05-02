@@ -41,7 +41,7 @@
     parts.join "."
   
   base.getNS: (namespace) ->
-    parts: key.split "."
+    parts: namespace.split "."
     currentNS: @
     for name in parts
       return unless currentNS[name]?
