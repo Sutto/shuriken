@@ -14,6 +14,7 @@ Shuriken: {
   Util:         {}
   jsPathPrefix: "/javascripts/"
   jsPathSuffix: ""
+  namespaces:   {}
 }
 
 Shuriken.Util.underscoreize: (s) ->
@@ -103,8 +104,13 @@ makeNS: (name, parent, sharedPrototype) ->
      @
     namespace.prototype: sharedPrototype
     new namespace name, parent
+    
+Shuriken.eachNS: (closure) ->
+  scopedClosure closure, namespace for namespace in Shuriken.namespaces
 
-Shuriken.as: (name) -> makeNS name
+Shuriken.as: (name) ->
+  ns: makeNS name
+  Shuriken.namespaces[name]: ns
+  ns
 
 @['Shuriken'] = Shuriken
-
