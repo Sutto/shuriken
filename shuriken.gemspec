@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{shuriken}
-  s.version = "0.1.3"
+  s.version = "0.1.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Darcy Laycock"]
@@ -22,9 +22,6 @@ Gem::Specification.new do |s|
      "coffeescripts/shuriken.coffee",
      "coffeescripts/shuriken/mixins.coffee",
      "coffeescripts/shuriken/mixins/callbacks.coffee",
-     "coffeescripts/shuriken/test.coffee",
-     "coffeescripts/shuriken/test/assertions.coffee",
-     "coffeescripts/shuriken/test/reporters.coffee",
      "javascripts/shuriken.js",
      "javascripts/shuriken/mixins.js",
      "javascripts/shuriken/mixins/callbacks.js",
