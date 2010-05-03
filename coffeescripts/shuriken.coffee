@@ -35,8 +35,8 @@
   base.toNSName: (children...) ->
     parts: children
     current: @
-    while current.parent?
-      parts.unshift parts
+    while current?
+      parts.unshift current.name
       current: current.parent
     parts.join "."
   
