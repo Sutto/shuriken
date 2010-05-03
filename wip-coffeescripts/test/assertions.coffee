@@ -1,8 +1,20 @@
 # General assertions.
 Shuriken.Test.Assertions: ((ns) ->
   
+  class ns.AssertionFailed
+    
+    constructor: (message) ->
+      @message: message
+      
+    toString: ->
+      "Assertion Failed: $@message"
+  
   ns.assert: (condition, message) ->
-    # TODO: Track a condition, description
+    if condition
+      # TODO: Track in some sort of test scope.
+      console.log "Assertion passed: $message"
+    else
+      throw new ns.AssertionFailed message
   
   ns.assertEqual: (expected, actual, message) ->
     message?= "Expected $actual, got $expected."
