@@ -43,3 +43,6 @@ task :test => :compile_scripts do
   end
 end
 
+task :watchr do
+  system "watchr tests.watchr"
+end

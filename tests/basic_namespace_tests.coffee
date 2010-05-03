@@ -11,8 +11,7 @@ describe 'Shuriken', ->
     delete root
     root: {}
     Shuriken.root: root
-    
-  
+
   describe 'creating a namespace', ->
     
     it 'should let you create a base namespace', ->
@@ -74,3 +73,42 @@ describe 'Shuriken', ->
       expect(root.Doom.A.B.getRootNS()).toEqual root.Doom
       expect(root.Doom.A.B.C.getRootNS()).toEqual root.Doom
       expect(root.Doom.D.getRootNS()).toEqual root.Doom
+      
+    it 'should let you get a nested child namespace', ->
+      expect(root.Doom.getNS('A')).toEqual     root.Doom.A
+      expect(root.Doom.getNS('A.B')).toEqual   root.Doom.A.B
+      expect(root.Doom.getNS('A.B.C')).toEqual root.Doom.A.B.C
+      expect(root.Doom.getNS('D')).toEqual     root.Doom.D
+      expect(root.Doom.A.getNS('B')).toEqual   root.Doom.A.B
+      expect(root.Doom.A.getNS('B.C')).toEqual root.Doom.A.B.C
+      expect(root.Doom.A.B.getNS('C')).toEqual root.Doom.A.B.C
+      expect(root.Doom.getNS('Awesome')).toBeNull()
+      expect(root.Doom.getNS('A.Another')).toBeNull()
+      expect(root.Doom.getNS('Awesome.Nested')).toBeNull()
+      expect(root.Doom.getNS('Awesome.Ouch')).toBeNull()
+      expect(root.Doom.getNS('Awesome.Nested.Rocking')).toBeNull()
+    
+    it 'should let you inspect the existence of namespaces', ->
+      expect(root.Doom.hasNS('A')).toBeTruthy()
+      expect(root.Doom.hasNS('A.B')).toBeTruthy()
+      expect(root.Doom.hasNS('A.B.C')).toBeTruthy()
+      expect(root.Doom.hasNS('D')).toBeTruthy()
+      expect(root.Doom.A.hasNS('B')).toBeTruthy()
+      expect(root.Doom.A.hasNS('B.C')).toBeTruthy()
+      expect(root.Doom.A.B.hasNS('C')).toBeTruthy()
+      expect(root.Doom.hasNS('Awesome')).toBeFalsy()
+      expect(root.Doom.hasNS('A.Another')).toBeFalsy()
+      expect(root.Doom.hasNS('Awesome.Nested')).toBeFalsy()
+      expect(root.Doom.hasNS('Awesome.Ouch')).toBeFalsy()
+      expect(root.Doom.hasNS('Awesome.Nested.Rocking')).toBeFalsy()
+      
+    describe 'Shuriken.Util', ->
+      
+      it 'should let you underscore a string', ->
+        expect(Shuriken.Util.underscoreize('A')).toEqual 'a'
+        expect(Shuriken.Util.underscoreize('A.B')).toEqual 'a/b'
+        expect(Shuriken.Util.underscoreize('A.B.C')).toEqual 'a/b/c'
+        expect(Shuriken.Util.underscoreize('NameOf.Doom')).toEqual 'name_of/doom'
+        expect(Shuriken.Util.underscoreize('Rockin.AndRoll.AndDoom')).toEqual 'rockin/and_roll/and_doom'
+        expect(Shuriken.Util.underscoreize('RPXNow')).toEqual 'rpx_now'
+        expect(Shuriken.Util.underscoreize('BHM.Authentication.RPXNow')).toEqual 'bhm/authentication/rpx_now'
