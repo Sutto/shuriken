@@ -17,6 +17,10 @@ Shuriken.Test.Assertions: ((ns) ->
       @passedMessages.push e.message
       @passedCount++
       
+    failedReason: ->
+      return "Not failed" if !@failedOn?
+      @failedOn.toString()
+      
     passed: -> not @failed()
     
     failed: -> @failedOn?
@@ -95,13 +99,13 @@ Shuriken.Test.withAssertions: (closure) ->
 Shuriken.Test.catchingAssertions: (closure) ->
   ac: Shuriken.Test.AssertionCatcher
   catcher: new ac()
-  oldCatcher: ac.currentAssertionCatcher
+  old: ac.currentAssertionCatcher
   ac.currentAssertionCatcher: catcher
   try
     closure()
   catch e
     catcher.failAssertion e
   finally
-    ac.currentAssertionCatcher: oldCatcher
+    ac.currentAssertionCatcher: old
   catcher
   
