@@ -1,6 +1,27 @@
 # General assertions.
 Shuriken.Test.Assertions: ((ns) ->
   
+  ns.currentAssertionCatcher: null
+  
+  class ns.AssertionCatcher
+    
+    constructor: ->
+      @passedCount:    0
+      @passedMessages: []
+      @failedOn:       null
+      
+    failAssertion: (e) ->
+      @failedOn: e
+      
+    passAssertion: (e) ->
+      @passedMessages.push e.message
+      @passedCount++
+      
+    passed: -> not @failed()
+    
+    failed: -> @failedOn?
+      
+  
   class ns.AssertionFailed
     
     constructor: (message) ->
@@ -70,3 +91,17 @@ Shuriken.Test.Assertions: ((ns) ->
 
 Shuriken.Test.withAssertions: (closure) ->
   `with(Shuriken.Test.Assertions) { closure() }`
+  
+Shuriken.Test.catchingAssertions: (closure) ->
+  ac: Shuriken.Test.AssertionCatcher
+  catcher: new ac()
+  oldCatcher: ac.currentAssertionCatcher
+  ac.currentAssertionCatcher: catcher
+  try
+    closure()
+  catch e
+    catcher.failAssertion e
+  finally
+    ac.currentAssertionCatcher: oldCatcher
+  catcher
+  
