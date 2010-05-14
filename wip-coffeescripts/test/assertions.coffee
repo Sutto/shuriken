@@ -95,6 +95,7 @@ Shuriken.Test.Assertions: ((ns) ->
 
 Shuriken.Test.withAssertions: (closure) ->
   `with(Shuriken.Test.Assertions) { closure() }`
+  true
   
 Shuriken.Test.catchingAssertions: (closure) ->
   ac: Shuriken.Test.AssertionCatcher

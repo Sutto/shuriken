@@ -4,6 +4,7 @@ Shuriken.Test = {
 
 Shuriken.withObject: (object, block) ->
   `with(object) { block.apply(object); }`
+  true
 
 ((test) ->
 
