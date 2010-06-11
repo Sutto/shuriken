@@ -50,7 +50,8 @@
   
   base.getRootNS: ->
     current: @
-    current: current.parent while current.parent?
+    while current.parent?
+      current: current.parent
     current
 
   base.hasNS: (namespace) ->

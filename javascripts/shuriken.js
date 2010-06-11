@@ -8,19 +8,19 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
   // First off, add our dataAttr extensions.
   (typeof jQuery !== "undefined" && jQuery !== null) ? (function($) {
     var stringToDataKey;
-    stringToDataKey = function stringToDataKey(key) {
+    stringToDataKey = function(key) {
       return ("data-" + key).replace(/_/g, '-');
     };
-    $.fn.dataAttr = function dataAttr(key, value) {
+    $.fn.dataAttr = function(key, value) {
       return this.attr(stringToDataKey(key), value);
     };
-    $.fn.removeDataAttr = function removeDataAttr(key) {
+    $.fn.removeDataAttr = function(key) {
       return this.removeAttr(stringToDataKey(key));
     };
-    $.fn.hasDataAttr = function hasDataAttr(key) {
+    $.fn.hasDataAttr = function(key) {
       return this.is(("[" + (stringToDataKey(key)) + "]"));
     };
-    $.metaAttr = function metaAttr(key) {
+    $.metaAttr = function(key) {
       return $(("meta[name='" + key + "']")).attr("content");
     };
     return $.metaAttr;
@@ -33,22 +33,23 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     namespaces: {},
     extensions: []
   };
-  Shuriken.Util.underscoreize = function underscoreize(s) {
+  Shuriken.Util.underscoreize = function(s) {
     return s.replace(/\./g, '/').replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2').replace(/([a-z\d])([A-Z])/g, '$1_$2').replace(/-/g, '_').toLowerCase();
   };
-  scopedClosure = function scopedClosure(closure, scope) {
+  scopedClosure = function(closure, scope) {
     if ($.isFunction(closure)) {
       return closure.call(scope, scope);
     }
   };
   // Base is the prototype for all namespaces.
   base = Shuriken.Base;
-  base.hasChildNamespace = function hasChildNamespace(child) {
+  base.hasChildNamespace = function(child) {
     return this.children.push(child);
   };
-  base.toNSName = function toNSName() {
+  base.toNSName = function() {
     var children, current, parts;
-    children = __slice.call(arguments, 0, arguments.length - 0);
+    var _a = arguments.length, _b = _a >= 1;
+    children = __slice.call(arguments, 0, _a - 0);
     parts = children;
     current = this;
     while ((typeof current !== "undefined" && current !== null)) {
@@ -57,7 +58,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
     return parts.join(".");
   };
-  base.getNS = function getNS(namespace) {
+  base.getNS = function(namespace) {
     var _a, _b, _c, _d, currentNS, name, parts;
     parts = namespace.split(".");
     currentNS = this;
@@ -71,7 +72,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
     return currentNS;
   };
-  base.getRootNS = function getRootNS() {
+  base.getRootNS = function() {
     var _a, current;
     current = this;
     while ((typeof (_a = current.parent) !== "undefined" && _a !== null)) {
@@ -79,11 +80,11 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
     return current;
   };
-  base.hasNS = function hasNS(namespace) {
+  base.hasNS = function(namespace) {
     var _a;
     return (typeof (_a = this.getNS(namespace)) !== "undefined" && _a !== null);
   };
-  base.withNS = function withNS(key, initializer) {
+  base.withNS = function(key, initializer) {
     var _a, _b, _c, _d, currentNS, hadSetup, name, parts;
     parts = key.split(".");
     currentNS = this;
@@ -102,27 +103,29 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
     return currentNS;
   };
-  base.withBase = function withBase(closure) {
+  base.withBase = function(closure) {
     return scopedClosure(closure, this.baseNS);
   };
-  base.extend = function extend(closure) {
+  base.extend = function(closure) {
     return scopedClosure(closure, this);
   };
-  base.isRoot = function isRoot() {
+  base.isRoot = function() {
     var _a;
     return !(typeof (_a = this.parent) !== "undefined" && _a !== null);
   };
-  base.log = function log() {
+  base.log = function() {
     var args;
-    args = __slice.call(arguments, 0, arguments.length - 0);
+    var _a = arguments.length, _b = _a >= 1;
+    args = __slice.call(arguments, 0, _a - 0);
     return console.log.apply(console, [("[" + (this.toNSName()) + "]")].concat(args));
   };
-  base.debug = function debug() {
+  base.debug = function() {
     var args;
-    args = __slice.call(arguments, 0, arguments.length - 0);
+    var _a = arguments.length, _b = _a >= 1;
+    args = __slice.call(arguments, 0, _a - 0);
     return console.log.apply(console, [("[Debug - " + (this.toNSName()) + "]")].concat(args));
   };
-  base.setupVia = function setupVia(f) {
+  base.setupVia = function(f) {
     return $(document).ready(__bind(function() {
         var _a;
         if ((typeof (_a = this.autosetup) !== "undefined" && _a !== null)) {
@@ -130,7 +133,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
         }
       }, this));
   };
-  base.require = function require(key, callback) {
+  base.require = function(key, callback) {
     var ns, path, script, url;
     ns = this.getNS(key);
     if ((typeof ns !== "undefined" && ns !== null)) {
@@ -150,12 +153,12 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
   };
   base.autosetup = true;
   // Used as a part of the prototype chain.
-  Shuriken.Namespace = function Namespace() {  };
+  Shuriken.Namespace = function() {  };
   Shuriken.Namespace.prototype = Shuriken.Base;
-  makeNS = function makeNS(name, parent, sharedPrototype) {
+  makeNS = function(name, parent, sharedPrototype) {
     var namespace;
     sharedPrototype = (typeof sharedPrototype !== "undefined" && sharedPrototype !== null) ? sharedPrototype : new Shuriken.Namespace();
-    namespace = function namespace() {
+    namespace = function() {
       this.name = name;
       this.parent = parent;
       this.baseNS = sharedPrototype;
@@ -168,7 +171,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     namespace.prototype = sharedPrototype;
     return new namespace(name, parent);
   };
-  Shuriken.defineExtension = function defineExtension(closure) {
+  Shuriken.defineExtension = function(closure) {
     var _a, _b, _c, namespace;
     _b = Shuriken.namespaces;
     for (_a = 0, _c = _b.length; _a < _c; _a++) {
@@ -177,7 +180,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
     return Shuriken.extensions.push(closure);
   };
-  Shuriken.as = function as(name) {
+  Shuriken.as = function(name) {
     var _a, _b, _c, extension, ns;
     ns = makeNS(name);
     Shuriken.namespaces[name] = ns;
