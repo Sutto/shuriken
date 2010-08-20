@@ -1,20 +1,20 @@
 Shuriken.defineExtension (baseNS) ->
   baseNS.withNS 'Mixins', (ns) ->
   
-    root:        @getRootNS()
-    ns.mixins:   {}
-    root.mixins: {}
+    root =        @getRootNS()
+    ns.mixins =   {}
+    root.mixins = {}
 
     root.withBase (base) ->
-      base.mixin: (mixins) -> ns.mixin @, mixins
+      base.mixin = (mixins) -> ns.mixin @, mixins
 
-    defineMixin: (key, mixin) ->
-      @mixins[key]: mixin
+    defineMixin = (key, mixin) ->
+      @mixins[key] = mixin
 
-    root.defineMixin: defineMixin
-    ns.define:       defineMixin
+    root.defineMixin = defineMixin
+    ns.define =        defineMixin
 
-    ns.lookupMixin: (mixin) ->
+    ns.lookupMixin = (mixin) ->
       switch typeof mixin
         when "string"
           if ns.mixins[mixin]?
@@ -26,7 +26,7 @@ Shuriken.defineExtension (baseNS) ->
         else
           mixin
 
-    ns.invokeMixin: (scope, mixin) ->
+    ns.invokeMixin = (scope, mixin) ->
       switch typeof mixin
         when "string"
           ns.invokeMixin scope, ns.lookupMixin(mixin)
@@ -35,7 +35,7 @@ Shuriken.defineExtension (baseNS) ->
         when "object"
           $.extend scope, mixin
 
-    ns.mixin: (scope, mixins) ->
-      mixins: [mixins] unless $.isArray mixins
+    ns.mixin = (scope, mixins) ->
+      mixins = [mixins] unless $.isArray mixins
       ns.invokeMixin scope, ns.lookupMixin(mixin) for mixin in mixins
       true
