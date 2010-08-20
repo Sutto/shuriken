@@ -36,7 +36,7 @@
     current = @
     while current?
       parts.unshift current.name
-      current: current.parent
+      current = current.parent
     parts.join "."
 
   base.getNS = (namespace) ->
@@ -44,7 +44,7 @@
     currentNS = @
     for name in parts
       return unless currentNS[name]?
-      currentNS: currentNS[name]
+      currentNS = currentNS[name]
     currentNS
 
   base.getRootNS = ->

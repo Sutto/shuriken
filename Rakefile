@@ -23,7 +23,7 @@ desc "Compiles the javascript from Coffeescript to Javascript"
 task :compile_scripts do
   Dir["coffeescripts/**/*.coffee"].each do |cs|
     output = File.dirname(cs).gsub("coffeescripts", "javascripts")
-    system "coffee", "-c", "--no-wrap", cs, "-o", output
+    system "coffee", "--no-wrap", "-o", output, "-c", cs
   end
 end
 
@@ -39,7 +39,7 @@ task :test => :compile_scripts do
       f.write template.result
     end
     $js_file = nil
-    system "coffee", "-c", "--no-wrap", test, "-o", "test-output"
+    system "coffee", "--no-wrap", "-o", "test-output", "-c", test
   end
 end
 

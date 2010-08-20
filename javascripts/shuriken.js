@@ -1,30 +1,28 @@
-var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
-    return function() {
-      return func.apply(obj || {}, args ? args.concat(__slice.call(arguments, 0)) : arguments);
-    };
+var __slice = Array.prototype.slice, __bind = function(func, context) {
+    return function(){ return func.apply(context, arguments); };
   };
 (function() {
   var Shuriken, base, makeNS, scopedClosure;
-  // First off, add our dataAttr extensions.
-  (typeof jQuery !== "undefined" && jQuery !== null) ? (function($) {
-    var stringToDataKey;
-    stringToDataKey = function(key) {
-      return ("data-" + key).replace(/_/g, '-');
-    };
-    $.fn.dataAttr = function(key, value) {
-      return this.attr(stringToDataKey(key), value);
-    };
-    $.fn.removeDataAttr = function(key) {
-      return this.removeAttr(stringToDataKey(key));
-    };
-    $.fn.hasDataAttr = function(key) {
-      return this.is(("[" + (stringToDataKey(key)) + "]"));
-    };
-    $.metaAttr = function(key) {
-      return $(("meta[name='" + key + "']")).attr("content");
-    };
-    return $.metaAttr;
-  })(jQuery) : null;
+  if ((typeof jQuery !== "undefined" && jQuery !== null)) {
+    (function($) {
+      var stringToDataKey;
+      stringToDataKey = function(key) {
+        return "data-$key".replace(/_/g, '-');
+      };
+      $.fn.dataAttr = function(key, value) {
+        return this.attr(stringToDataKey(key), value);
+      };
+      $.fn.removeDataAttr = function(key) {
+        return this.removeAttr(stringToDataKey(key));
+      };
+      $.fn.hasDataAttr = function(key) {
+        return this.is("[${stringToDataKey(key)}]");
+      };
+      return ($.metaAttr = function(key) {
+        return $("meta[name='$key']").attr("content");
+      });
+    })(jQuery);
+  };
   Shuriken = {
     Base: {},
     Util: {},
@@ -41,15 +39,13 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
       return closure.call(scope, scope);
     }
   };
-  // Base is the prototype for all namespaces.
   base = Shuriken.Base;
   base.hasChildNamespace = function(child) {
     return this.children.push(child);
   };
   base.toNSName = function() {
     var children, current, parts;
-    var _a = arguments.length, _b = _a >= 1;
-    children = __slice.call(arguments, 0, _a - 0);
+    children = __slice.call(arguments, 0);
     parts = children;
     current = this;
     while ((typeof current !== "undefined" && current !== null)) {
@@ -115,23 +111,21 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
   };
   base.log = function() {
     var args;
-    var _a = arguments.length, _b = _a >= 1;
-    args = __slice.call(arguments, 0, _a - 0);
-    return console.log.apply(console, [("[" + (this.toNSName()) + "]")].concat(args));
+    args = __slice.call(arguments, 0);
+    return console.log.apply(console, ["[${@toNSName()}]"].concat(args));
   };
   base.debug = function() {
     var args;
-    var _a = arguments.length, _b = _a >= 1;
-    args = __slice.call(arguments, 0, _a - 0);
-    return console.log.apply(console, [("[Debug - " + (this.toNSName()) + "]")].concat(args));
+    args = __slice.call(arguments, 0);
+    return console.log.apply(console, ["[Debug - ${@toNSName()}]"].concat(args));
   };
   base.setupVia = function(f) {
     return $(document).ready(__bind(function() {
-        var _a;
-        if ((typeof (_a = this.autosetup) !== "undefined" && _a !== null)) {
-          return scopedClosure(f, this);
-        }
-      }, this));
+      var _a;
+      if ((typeof (_a = this.autosetup) !== "undefined" && _a !== null)) {
+        return scopedClosure(f, this);
+      }
+    }, this));
   };
   base.require = function(key, callback) {
     var ns, path, script, url;
@@ -139,8 +133,8 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     if ((typeof ns !== "undefined" && ns !== null)) {
       return scopedClosure(callback, ns);
     } else {
-      path = Shuriken.Util.underscoreize(("" + (this.toNSName()) + "." + key));
-      url = ("" + (Shuriken.jsPathPrefix) + (path) + ".js" + (Shuriken.jsPathSuffix));
+      path = Shuriken.Util.underscoreize("${@toNSName()}.$key");
+      url = "${Shuriken.jsPathPrefix}${path}.js${Shuriken.jsPathSuffix}";
       script = $("<script />", {
         type: "text/javascript",
         src: url
@@ -152,8 +146,7 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     }
   };
   base.autosetup = true;
-  // Used as a part of the prototype chain.
-  Shuriken.Namespace = function() {  };
+  Shuriken.Namespace = function() {};
   Shuriken.Namespace.prototype = Shuriken.Base;
   makeNS = function(name, parent, sharedPrototype) {
     var namespace;
@@ -193,6 +186,5 @@ var __slice = Array.prototype.slice, __bind = function(func, obj, args) {
     return ns;
   };
   Shuriken.root = this;
-  this['Shuriken'] = Shuriken;
-  return this['Shuriken'];
+  return (this['Shuriken'] = Shuriken);
 })();
