@@ -1,6 +1,6 @@
 module Shuriken
   
-  VERSION = "0.1.4".freeze
+  VERSION = "0.2.0".freeze
   
   def self.register_framework!
     Barista::Framework.register 'shuriken', File.expand_path('../coffeescripts', File.dirname(__FILE__))
