@@ -4,8 +4,8 @@ Shuriken.defineExtension (baseNS) ->
     mixin.callbacks = {}
 
     mixin.defineCallback = (key) ->
-      @["on$key"] =     (callback) -> @hasCallback key, callback
-      @["invoke$key"] = (args...)  -> @invokeCallbacks key, args...
+      @["on#{key}"]    = (callback) -> @hasCallback key, callback
+      @["invoke#{key}"] = (args...)  -> @invokeCallbacks key, args...
       true
 
     mixin.hasCallback = (name, callback) ->

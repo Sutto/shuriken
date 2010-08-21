@@ -3,10 +3,10 @@ Shuriken.defineExtension(function(baseNS) {
   return baseNS.defineMixin('Callbacks', function(mixin) {
     mixin.callbacks = {};
     mixin.defineCallback = function(key) {
-      this["on$key"] = function(callback) {
+      this[("on" + (key))] = function(callback) {
         return this.hasCallback(key, callback);
       };
-      this["invoke$key"] = function() {
+      this[("invoke" + (key))] = function() {
         var args;
         args = __slice.call(arguments, 0);
         return this.invokeCallbacks.apply(this, [key].concat(args));

@@ -3,11 +3,11 @@
   # First off, add our dataAttr extensions.
   if jQuery?
     (($) ->
-      stringToDataKey =      (key) -> "data-$key".replace /_/g, '-'
-      $.fn.dataAttr = (key, value) -> @attr stringToDataKey(key), value
-      $.fn.removeDataAttr =  (key) -> @removeAttr stringToDataKey(key)
-      $.fn.hasDataAttr =     (key) -> @is "[${stringToDataKey(key)}]"
-      $.metaAttr =           (key) -> $("meta[name='$key']").attr "content"
+      stringToDataKey     = (key) -> "data-#{key}".replace /_/g, '-'
+      $.fn.dataAttr       = (key, value) -> @attr stringToDataKey(key), value
+      $.fn.removeDataAttr = (key) -> @removeAttr stringToDataKey(key)
+      $.fn.hasDataAttr    = (key) -> @is "[#{stringToDataKey(key)}]"
+      $.metaAttr          = (key) -> $("meta[name='#{key}']").attr "content"
     )(jQuery)
 
 
@@ -77,10 +77,10 @@
     not @parent?
 
   base.log = (args...) ->
-    console.log "[${@toNSName()}]", args...
+    console.log "[#{@toNSName()}]", args...
 
   base.debug = (args...) ->
-    console.log "[Debug - ${@toNSName()}]", args...
+    console.log "[Debug: #{@toNSName()}]", args...
 
   base.setupVia = (f) ->
     $(document).ready => scopedClosure(f, @) if @autosetup?
@@ -90,9 +90,9 @@
     if ns?
       scopedClosure callback, ns
     else
-      path =   Shuriken.Util.underscoreize "${@toNSName()}.$key"
-      url =    "${Shuriken.jsPathPrefix}${path}.js${Shuriken.jsPathSuffix}"
-      script = $ "<script />", {type: "text/javascript", src: url}
+      path =   Shuriken.Util.underscoreize "#{@toNSName()}.#{key}"
+      url =    "#{Shuriken.jsPathPrefix}#{path}.js#{Shuriken.jsPathSuffix}"
+      script = $ "<script />", type: "text/javascript", src: url
       script.load -> scopedClosure callback, @getNS(key)
       script.appendTo $ "head"
 

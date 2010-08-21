@@ -7,7 +7,7 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
     (function($) {
       var stringToDataKey;
       stringToDataKey = function(key) {
-        return "data-$key".replace(/_/g, '-');
+        return ("data-" + (key)).replace(/_/g, '-');
       };
       $.fn.dataAttr = function(key, value) {
         return this.attr(stringToDataKey(key), value);
@@ -16,10 +16,10 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
         return this.removeAttr(stringToDataKey(key));
       };
       $.fn.hasDataAttr = function(key) {
-        return this.is("[${stringToDataKey(key)}]");
+        return this.is(("[" + (stringToDataKey(key)) + "]"));
       };
       return ($.metaAttr = function(key) {
-        return $("meta[name='$key']").attr("content");
+        return $(("meta[name='" + (key) + "']")).attr("content");
       });
     })(jQuery);
   };
@@ -112,12 +112,12 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
   base.log = function() {
     var args;
     args = __slice.call(arguments, 0);
-    return console.log.apply(console, ["[${@toNSName()}]"].concat(args));
+    return console.log.apply(console, [("[" + (this.toNSName()) + "]")].concat(args));
   };
   base.debug = function() {
     var args;
     args = __slice.call(arguments, 0);
-    return console.log.apply(console, ["[Debug - ${@toNSName()}]"].concat(args));
+    return console.log.apply(console, [("[Debug: " + (this.toNSName()) + "]")].concat(args));
   };
   base.setupVia = function(f) {
     return $(document).ready(__bind(function() {
@@ -133,8 +133,8 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
     if ((typeof ns !== "undefined" && ns !== null)) {
       return scopedClosure(callback, ns);
     } else {
-      path = Shuriken.Util.underscoreize("${@toNSName()}.$key");
-      url = "${Shuriken.jsPathPrefix}${path}.js${Shuriken.jsPathSuffix}";
+      path = Shuriken.Util.underscoreize(("" + (this.toNSName()) + "." + (key)));
+      url = ("" + (Shuriken.jsPathPrefix) + (path) + ".js" + (Shuriken.jsPathSuffix));
       script = $("<script />", {
         type: "text/javascript",
         src: url
