@@ -19,15 +19,17 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-desc "Compiles the javascript from Coffeescript to Javascript"
-task :compile_scripts do
-  Dir["coffeescripts/**/*.coffee"].each do |cs|
-    output = File.dirname(cs).gsub("coffeescripts", "javascripts")
-    system "coffee", "--no-wrap", "-o", output, "-c", cs
-  end
+require 'active_support/all'
+require 'barista/rake_task'
+
+Barista::RakeTask.new do |t|
+  t.output_directory = 'javascripts'
+  t.input_directory  = 'coffeescripts'
+  t.bare             = true
+  t.add_preamble     = false
 end
 
-task :test => :compile_scripts do
+task :test do
   require 'erb'
   template = ERB.new(File.read("tests/template.erb"))
   FileUtils.mkdir_p 'test-output'
@@ -41,6 +43,9 @@ task :test => :compile_scripts do
     $js_file = nil
     system "coffee", "--no-wrap", "-o", "test-output", "-c", test
   end
+
+  Barista.output_root = rails
+
 end
 
 task :watchr do

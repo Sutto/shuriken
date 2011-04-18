@@ -28,12 +28,9 @@ Shuriken.defineExtension (baseNS) ->
 
     ns.invokeMixin = (scope, mixin) ->
       switch typeof mixin
-        when "string"
-          ns.invokeMixin scope, ns.lookupMixin(mixin)
-        when "function"
-          mixin.call scope, scope
-        when "object"
-          $.extend scope, mixin
+        when "string"   then ns.invokeMixin scope, ns.lookupMixin(mixin)
+        when "function" then mixin.call scope, scope
+        when "object"   then $.extend scope, mixin
 
     ns.mixin = (scope, mixins) ->
       mixins = [mixins] unless $.isArray mixins

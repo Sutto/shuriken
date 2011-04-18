@@ -5,50 +5,50 @@ Shuriken.defineExtension(function(baseNS) {
     ns.mixins = {};
     root.mixins = {};
     root.withBase(function(base) {
-      return (base.mixin = function(mixins) {
+      return base.mixin = function(mixins) {
         return ns.mixin(this, mixins);
-      });
+      };
     });
     defineMixin = function(key, mixin) {
-      return (this.mixins[key] = mixin);
+      return this.mixins[key] = mixin;
     };
     root.defineMixin = defineMixin;
     ns.define = defineMixin;
     ns.lookupMixin = function(mixin) {
-      var _a, _b, _c;
-      if ((_a = typeof mixin) === "string") {
-        if ((typeof (_b = ns.mixins[mixin]) !== "undefined" && _b !== null)) {
-          return ns.mixins[mixin];
-        } else if ((typeof (_c = root.mixins[mixin]) !== "undefined" && _c !== null)) {
-          return root.mixins[mixin];
-        } else {
-          return {};
-        }
-      } else {
-        return mixin;
+      switch (typeof mixin) {
+        case "string":
+          if (ns.mixins[mixin] != null) {
+            return ns.mixins[mixin];
+          } else if (root.mixins[mixin] != null) {
+            return root.mixins[mixin];
+          } else {
+            return {};
+          }
+          break;
+        default:
+          return mixin;
       }
     };
     ns.invokeMixin = function(scope, mixin) {
-      var _a;
-      if ((_a = typeof mixin) === "string") {
-        return ns.invokeMixin(scope, ns.lookupMixin(mixin));
-      } else if (_a === "function") {
-        return mixin.call(scope, scope);
-      } else if (_a === "object") {
-        return $.extend(scope, mixin);
+      switch (typeof mixin) {
+        case "string":
+          return ns.invokeMixin(scope, ns.lookupMixin(mixin));
+        case "function":
+          return mixin.call(scope, scope);
+        case "object":
+          return $.extend(scope, mixin);
       }
     };
-    return (ns.mixin = function(scope, mixins) {
-      var _a, _b, _c, mixin;
-      if (!($.isArray(mixins))) {
+    return ns.mixin = function(scope, mixins) {
+      var mixin, _i, _len;
+      if (!$.isArray(mixins)) {
         mixins = [mixins];
       }
-      _b = mixins;
-      for (_a = 0, _c = _b.length; _a < _c; _a++) {
-        mixin = _b[_a];
+      for (_i = 0, _len = mixins.length; _i < _len; _i++) {
+        mixin = mixins[_i];
         ns.invokeMixin(scope, ns.lookupMixin(mixin));
       }
       return true;
-    });
+    };
   });
 });

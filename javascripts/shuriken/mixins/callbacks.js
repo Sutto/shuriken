@@ -3,38 +3,42 @@ Shuriken.defineExtension(function(baseNS) {
   return baseNS.defineMixin('Callbacks', function(mixin) {
     mixin.callbacks = {};
     mixin.defineCallback = function(key) {
-      this[("on" + (key))] = function(callback) {
+      this["on" + key] = function(callback) {
         return this.hasCallback(key, callback);
       };
-      this[("invoke" + (key))] = function() {
+      this["invoke" + key] = function() {
         var args;
-        args = __slice.call(arguments, 0);
-        return this.invokeCallbacks.apply(this, [key].concat(args));
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return this.invokeCallbacks.apply(this, [key].concat(__slice.call(args)));
       };
       return true;
     };
     mixin.hasCallback = function(name, callback) {
-      var callbacks;
-      callbacks = mixin.callbacks[name] = (typeof mixin.callbacks[name] !== "undefined" && mixin.callbacks[name] !== null) ? mixin.callbacks[name] : [];
+      var callbacks, _base, _ref;
+      callbacks = (_ref = (_base = mixin.callbacks)[name]) != null ? _ref : _base[name] = [];
       callbacks.push(callback);
       return true;
     };
     mixin.callbacksFor = function(name) {
       var existing;
       existing = mixin.callbacks[name];
-      return (typeof existing !== "undefined" && existing !== null) ? existing : [];
+      if (existing != null) {
+        return existing;
+      } else {
+        return [];
+      }
     };
-    return (mixin.invokeCallbacks = function(name) {
-      var _a, _b, _c, args, callback;
-      args = __slice.call(arguments, 1);
-      _b = mixin.callbacksFor(name);
-      for (_a = 0, _c = _b.length; _a < _c; _a++) {
-        callback = _b[_a];
-        if (callback.apply(this, args) === false) {
+    return mixin.invokeCallbacks = function() {
+      var args, callback, name, _i, _len, _ref;
+      name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      _ref = mixin.callbacksFor(name);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        callback = _ref[_i];
+        if (callback.apply(null, args) === false) {
           return false;
         }
       }
       return true;
-    });
+    };
   });
 });

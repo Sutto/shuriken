@@ -1,13 +1,11 @@
-var __slice = Array.prototype.slice, __bind = function(func, context) {
-    return function(){ return func.apply(context, arguments); };
-  };
+var __slice = Array.prototype.slice, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 (function() {
   var Shuriken, base, makeNS, scopedClosure;
-  if ((typeof jQuery !== "undefined" && jQuery !== null)) {
+  if (typeof jQuery != "undefined" && jQuery !== null) {
     (function($) {
       var stringToDataKey;
       stringToDataKey = function(key) {
-        return ("data-" + (key)).replace(/_/g, '-');
+        return ("data-" + key).replace(/_/g, '-');
       };
       $.fn.dataAttr = function(key, value) {
         return this.attr(stringToDataKey(key), value);
@@ -16,13 +14,13 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
         return this.removeAttr(stringToDataKey(key));
       };
       $.fn.hasDataAttr = function(key) {
-        return this.is(("[" + (stringToDataKey(key)) + "]"));
+        return this.is("[" + (stringToDataKey(key)) + "]");
       };
-      return ($.metaAttr = function(key) {
-        return $(("meta[name='" + (key) + "']")).attr("content");
-      });
+      return $.metaAttr = function(key) {
+        return $("meta[name='" + key + "']").attr("content");
+      };
     })(jQuery);
-  };
+  }
   Shuriken = {
     Base: {},
     Util: {},
@@ -45,49 +43,46 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
   };
   base.toNSName = function() {
     var children, current, parts;
-    children = __slice.call(arguments, 0);
+    children = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     parts = children;
     current = this;
-    while ((typeof current !== "undefined" && current !== null)) {
+    while (current != null) {
       parts.unshift(current.name);
       current = current.parent;
     }
     return parts.join(".");
   };
   base.getNS = function(namespace) {
-    var _a, _b, _c, _d, currentNS, name, parts;
+    var currentNS, name, parts, _i, _len;
     parts = namespace.split(".");
     currentNS = this;
-    _b = parts;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      name = _b[_a];
-      if (!((typeof (_d = currentNS[name]) !== "undefined" && _d !== null))) {
-        return null;
+    for (_i = 0, _len = parts.length; _i < _len; _i++) {
+      name = parts[_i];
+      if (currentNS[name] == null) {
+        return;
       }
       currentNS = currentNS[name];
     }
     return currentNS;
   };
   base.getRootNS = function() {
-    var _a, current;
+    var current;
     current = this;
-    while ((typeof (_a = current.parent) !== "undefined" && _a !== null)) {
+    while (current.parent != null) {
       current = current.parent;
     }
     return current;
   };
   base.hasNS = function(namespace) {
-    var _a;
-    return (typeof (_a = this.getNS(namespace)) !== "undefined" && _a !== null);
+    return this.getNS(namespace) != null;
   };
   base.withNS = function(key, initializer) {
-    var _a, _b, _c, _d, currentNS, hadSetup, name, parts;
+    var currentNS, hadSetup, name, parts, _i, _len;
     parts = key.split(".");
     currentNS = this;
-    _b = parts;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      name = _b[_a];
-      if (!(typeof (_d = currentNS[name]) !== "undefined" && _d !== null)) {
+    for (_i = 0, _len = parts.length; _i < _len; _i++) {
+      name = parts[_i];
+      if (!(currentNS[name] != null)) {
         currentNS[name] = makeNS(name, currentNS, this.baseNS);
       }
       currentNS = currentNS[name];
@@ -106,23 +101,21 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
     return scopedClosure(closure, this);
   };
   base.isRoot = function() {
-    var _a;
-    return !(typeof (_a = this.parent) !== "undefined" && _a !== null);
+    return !(this.parent != null);
   };
   base.log = function() {
     var args;
-    args = __slice.call(arguments, 0);
-    return console.log.apply(console, [("[" + (this.toNSName()) + "]")].concat(args));
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return console.log.apply(console, ["[" + (this.toNSName()) + "]"].concat(__slice.call(args)));
   };
   base.debug = function() {
     var args;
-    args = __slice.call(arguments, 0);
-    return console.log.apply(console, [("[Debug: " + (this.toNSName()) + "]")].concat(args));
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return console.log.apply(console, ["[Debug: " + (this.toNSName()) + "]"].concat(__slice.call(args)));
   };
   base.setupVia = function(f) {
     return $(document).ready(__bind(function() {
-      var _a;
-      if ((typeof (_a = this.autosetup) !== "undefined" && _a !== null)) {
+      if (this.autosetup != null) {
         return scopedClosure(f, this);
       }
     }, this));
@@ -130,11 +123,11 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
   base.require = function(key, callback) {
     var ns, path, script, url;
     ns = this.getNS(key);
-    if ((typeof ns !== "undefined" && ns !== null)) {
+    if (ns != null) {
       return scopedClosure(callback, ns);
     } else {
-      path = Shuriken.Util.underscoreize(("" + (this.toNSName()) + "." + (key)));
-      url = ("" + (Shuriken.jsPathPrefix) + (path) + ".js" + (Shuriken.jsPathSuffix));
+      path = Shuriken.Util.underscoreize("" + (this.toNSName()) + "." + key);
+      url = "" + Shuriken.jsPathPrefix + path + ".js" + Shuriken.jsPathSuffix;
       script = $("<script />", {
         type: "text/javascript",
         src: url
@@ -150,13 +143,13 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
   Shuriken.Namespace.prototype = Shuriken.Base;
   makeNS = function(name, parent, sharedPrototype) {
     var namespace;
-    sharedPrototype = (typeof sharedPrototype !== "undefined" && sharedPrototype !== null) ? sharedPrototype : new Shuriken.Namespace();
+    sharedPrototype != null ? sharedPrototype : sharedPrototype = new Shuriken.Namespace();
     namespace = function() {
       this.name = name;
       this.parent = parent;
       this.baseNS = sharedPrototype;
       this.children = [];
-      if ((typeof parent !== "undefined" && parent !== null)) {
+      if (parent != null) {
         parent.hasChildNamespace(this);
       }
       return this;
@@ -165,26 +158,26 @@ var __slice = Array.prototype.slice, __bind = function(func, context) {
     return new namespace(name, parent);
   };
   Shuriken.defineExtension = function(closure) {
-    var _a, _b, _c, namespace;
-    _b = Shuriken.namespaces;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      namespace = _b[_a];
+    var namespace, _i, _len, _ref;
+    _ref = Shuriken.namespaces;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      namespace = _ref[_i];
       scopedClosure(closure, namespace);
     }
     return Shuriken.extensions.push(closure);
   };
   Shuriken.as = function(name) {
-    var _a, _b, _c, extension, ns;
+    var extension, ns, _i, _len, _ref;
     ns = makeNS(name);
     Shuriken.namespaces[name] = ns;
     Shuriken.root[name] = ns;
-    _b = Shuriken.extensions;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      extension = _b[_a];
+    _ref = Shuriken.extensions;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      extension = _ref[_i];
       scopedClosure(extension, ns);
     }
     return ns;
   };
   Shuriken.root = this;
-  return (this['Shuriken'] = Shuriken);
+  return this['Shuriken'] = Shuriken;
 })();
